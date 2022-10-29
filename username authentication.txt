@@ -1,0 +1,37 @@
+ public static boolean CheckUsernameExists(String username)
+{
+    boolean usernameExists = false;
+
+    try
+    {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
+
+        PreparedStatement st = connection.prepareStatement("select * from Members order by username desc");
+        ResultSet r1=st.executeQuery();
+        String usernameCounter;
+         if(r1.next()) 
+         {
+           usernameCounter =  r1.getString("username");
+           if(usernameCounter == username) //this part does not happen even if it should
+           {
+               System.out.println("It already exists");
+              usernameExists = true;
+           }
+         }
+
+
+     }
+
+     catch (SQLException e) 
+     {
+        System.out.println("SQL Exception: "+ e.toString());
+     } 
+     catch (ClassNotFoundException cE) 
+     {
+        System.out.println("Class Not Found Exception: "+ cE.toString());
+     }
+
+ return usernameExists;
+ }
